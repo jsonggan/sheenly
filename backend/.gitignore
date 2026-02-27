@@ -1,0 +1,23 @@
+# Virtual Environment
+.venv
+
+# Compiled Python files
+__pycache__
+*.pyc
+*.pyd
+*.pyo
+
+# IDE specific files
+.idea/
+
+# Distribution and build archives
+dist/
+build/
+*.egg-info/
+
+# Test and cache files
+.pytest_cache/
+.hypothesis/
+
+# Environment variables
+.env
