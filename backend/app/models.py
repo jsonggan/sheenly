@@ -1,14 +1,14 @@
 import uuid
-from datetime import datetime, date
+from datetime import date, datetime, timezone
 
-from sqlalchemy import String, Boolean, Date, DateTime, Index
+from sqlalchemy import Boolean, Date, DateTime, Index, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
 
 
 def _now() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
 
 
 class InventoryItem(Base):
