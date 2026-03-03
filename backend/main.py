@@ -1,8 +1,1 @@
-from fastapi import FastAPI
-
-app = FastAPI()
-
-
-@app.get("/")
-def root():
-    return {"message": "Hello from sheenly-backend!"}
+from app.main import app  # noqa: F401

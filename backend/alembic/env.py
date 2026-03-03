@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -8,6 +9,9 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
+# Make sure the backend package root is on the path so `app` can be imported
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # Load .env from backend directory so DATABASE_URL is available when running alembic
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
@@ -26,11 +30,11 @@ if database_url:
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+# Import models so their tables are registered on Base.metadata before autogenerate runs
+from app.database import Base  # noqa: E402
+import app.models  # noqa: E402, F401
+
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -76,9 +80,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
